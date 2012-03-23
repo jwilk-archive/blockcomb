@@ -1,0 +1,75 @@
+#!/usr/bin/python3
+
+import argparse
+import re
+import subprocess as ipc
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('device')
+    parser.add_argument('begin', type=int)
+    parser.add_argument('end', type=int)
+    options = parser.parse_args()
+    return do(options)
+
+
+def debugfs(device, *command):
+    commandline = ['debugfs', '-R', ' '.join(map(str, command)), device]
+    child = ipc.Popen(commandline, stderr=ipc.PIPE, stdout=ipc.PIPE)
+    stdout, stderr = child.communicate()
+    if child.returncode != 0:
+        raise IOError
+    return [line.decode('ASCII') for line in stdout.splitlines()]
+
+def do(options):
+    if options.end < options.begin:
+        raise ValueError
+    testb = debugfs(options.device, 'testb', options.begin, options.end - options.begin + 1)
+    inodes = set()
+    blocks = set()
+    for line in testb:
+        match = re.match('^Block (\d+) marked in use$', line)
+        if match is not None:
+            blocks.add(int(match.group(1)))
+    while blocks:
+        block = blocks.pop()
+        header, icheck = debugfs(options.device, 'icheck', block)
+        assert header == 'Block\tInode number'
+        block_s, inode = icheck.split('\t')
+        assert block == int(block_s)
+        if inode == '<block not found>':
+            print('<block {0} not found>'.format(block))
+            continue
+        else:
+            inode = int(inode)
+        if inode in inodes:
+            continue
+        else:
+            inodes.add(inode)
+        ncheck = debugfs(options.device, 'ncheck', inode)
+        header = ncheck[0]
+        assert header == 'Inode\tPathname'
+        if len(ncheck) == 1:
+            print('<inode {0} not found>'.format(inode))
+            continue
+        else:
+            [ncheck] = ncheck[1:]
+        inode2, path = ncheck.split('\t', 1)
+        print(path)
+        stat = debugfs(options.device, 'stat', '<{0}>'.format(inode))
+        i = stat.index('BLOCKS:')
+        block_stat = stat[i + 1]
+        for match in re.finditer(':([0-9]+)(?:-([0-9]+))?', block_stat):
+            l, r = match.groups()
+            l = int(l)
+            if r is None:
+                r = l
+            else:
+                r = int(r)
+            for i in range(l, r + 1):
+                blocks.discard(i)
+
+if __name__ == '__main__':
+    main()
+
+# vim:ts=4 sw=4 et
