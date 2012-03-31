@@ -57,9 +57,12 @@ def do(options):
         inode2, path = ncheck.split('\t', 1)
         print(path)
         stat = debugfs(options.device, 'stat', '<{0}>'.format(inode))
-        i = stat.index('BLOCKS:')
+        try:
+            i = stat.index('BLOCKS:')
+        except LookupError:
+            i = stat.index('EXTENTS:')
         block_stat = stat[i + 1]
-        for match in re.finditer(':([0-9]+)(?:-([0-9]+))?', block_stat):
+        for match in re.finditer(': ?([0-9]+)(?:-([0-9]+))?', block_stat):
             l, r = match.groups()
             l = int(l)
             if r is None:
