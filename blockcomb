@@ -30,6 +30,7 @@ def do(options):
         match = re.match('^Block (\d+) marked in use$', line)
         if match is not None:
             blocks.add(int(match.group(1)))
+    del testb
     while blocks:
         block = blocks.pop()
         header, icheck = debugfs(options.device, 'icheck', block)
