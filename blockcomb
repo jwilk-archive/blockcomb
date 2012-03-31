@@ -12,7 +12,6 @@ def main():
     options = parser.parse_args()
     return do(options)
 
-
 def debugfs(device, *command):
     commandline = ['debugfs', '-R', ' '.join(map(str, command)), device]
     child = ipc.Popen(commandline, stderr=ipc.PIPE, stdout=ipc.PIPE)
