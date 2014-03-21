@@ -28,6 +28,8 @@ import argparse
 import re
 import subprocess as ipc
 
+error = argparse.ArgumentParser().error
+
 def main():
     doc = __doc__.strip()
     parser = argparse.ArgumentParser(description=doc)
@@ -54,7 +56,7 @@ def debugfs(device, *command):
 
 def do(options):
     if options.end < options.begin:
-        raise ValueError
+        error('empty block range')
     testb = debugfs(options.device, 'testb', options.begin, options.end - options.begin + 1)
     inodes = set()
     blocks = set()
