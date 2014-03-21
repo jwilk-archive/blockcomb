@@ -50,7 +50,11 @@ class DebugfsError(Exception):
     pass
 
 def debugfs(device, *command):
-    commandline = ['/sbin/debugfs', '-R', ' '.join(map(str, command)), device]
+    commandline = [
+        '/sbin/debugfs',
+        '-R', ' '.join(map(str, command)),
+        device
+    ]
     child = ipc.Popen(commandline, stderr=ipc.PIPE, stdout=ipc.PIPE)
     stdout, stderr = child.communicate()
     stderr = stderr.decode('ASCII', 'replace').splitlines()
