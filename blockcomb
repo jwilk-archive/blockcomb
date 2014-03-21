@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 '''
-*blockcomb* finds files residing in a range of blocks
+*blockcomb* finds files residing in a range of blocks of an ext2/ext3/ext4
+filesystem
 '''
 
 import argparse
