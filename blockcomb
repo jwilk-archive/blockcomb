@@ -20,15 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+'''
+*blockcomb* finds files residing in a range of blocks
+'''
+
 import argparse
 import re
 import subprocess as ipc
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('device')
-    parser.add_argument('begin', type=int)
-    parser.add_argument('end', type=int)
+    doc = __doc__.strip()
+    parser = argparse.ArgumentParser(description=doc)
+    parser.add_argument('device',
+        metavar='<device>', help='device to comb through')
+    parser.add_argument('begin', type=int,
+        metavar='<begin>',
+        help='first block number',
+    )
+    parser.add_argument('end', type=int,
+        metavar='<end>',
+        help='last block number',
+    )
     options = parser.parse_args()
     return do(options)
 
