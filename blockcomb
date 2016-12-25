@@ -76,7 +76,7 @@ def do(options):
     inodes = set()
     blocks = set()
     for line in testb:
-        match = re.match('^Block (\d+) marked in use$', line)
+        match = re.match(r'^Block (\d+) marked in use$', line)
         if match is not None:
             blocks.add(int(match.group(1)))
     del testb
