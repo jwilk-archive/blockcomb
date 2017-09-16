@@ -1,0 +1,17 @@
+.. code:: console
+
+   $ blockcomb --help
+   usage: blockcomb [-h] <device> <begin> <end>
+
+   *blockcomb* finds files residing in a range of blocks of an ext2/ext3/ext4
+   filesystem
+
+   positional arguments:
+     <device>    device to comb through
+     <begin>     first block number
+     <end>       last block number
+
+   optional arguments:
+     -h, --help  show this help message and exit
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
