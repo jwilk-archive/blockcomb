@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e -u
+here=$(dirname "$0")
+: "${BLOCKCOMB:=$here/blockcomb}"
+tmpdir=$(mktemp -d -t blockcomb.XXXXXX)
+PS4='$ '
+set -x
+truncate -s 1M "$tmpdir/test.ext2"
+/sbin/mkfs.ext2 -F "$tmpdir/test.ext2"
+"$BLOCKCOMB" "$tmpdir/test.ext2" 1 1023
+set +x
+rm -rf "$tmpdir"
