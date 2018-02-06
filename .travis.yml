@@ -10,9 +10,9 @@ install:
 - pip install pydiatra pyflakes
 - \[ "$TRAVIS_PYTHON_VERSION" = 3.2 ] || pip install docutils pygments
 script:
+- ./test
 - python3 -m pydiatra blockcomb
 - python3 -m pyflakes blockcomb
-- ./blockcomb --help
 - \[ "$TRAVIS_PYTHON_VERSION" = 3.2 ] || ./private/check-rst
 
 # vim:ts=2 sts=2 sw=2 et
