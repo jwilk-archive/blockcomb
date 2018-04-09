@@ -6,13 +6,15 @@ python:
 - "3.5"
 - "3.6"
 - "3.7-dev"
+before_install:
+- if [[ $TRAVIS_PYTHON_VERSION = 3.2 ]]; then if_pygments=:; fi
 install:
 - pip install pydiatra pyflakes
-- \[ "$TRAVIS_PYTHON_VERSION" = 3.2 ] || pip install docutils pygments
+- $if_pygments pip install docutils pygments
 script:
 - ./test
 - python3 -m pydiatra blockcomb
 - python3 -m pyflakes blockcomb
-- \[ "$TRAVIS_PYTHON_VERSION" = 3.2 ] || ./private/check-rst
+- $if_pygments ./private/check-rst
 
 # vim:ts=2 sts=2 sw=2 et
