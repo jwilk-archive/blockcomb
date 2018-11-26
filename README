@@ -1,15 +1,15 @@
 .. code:: console
 
    $ blockcomb --help
-   usage: blockcomb [-h] <device> <begin> <end>
+   usage: blockcomb [-h] DEVICE BEGIN END
 
    *blockcomb* finds files residing in a range of blocks of an ext2/ext3/ext4
    filesystem
 
    positional arguments:
-     <device>    device to comb through
-     <begin>     first block number
-     <end>       last block number
+     DEVICE      device to comb through
+     BEGIN       first block number
+     END         last block number
 
    optional arguments:
      -h, --help  show this help message and exit
